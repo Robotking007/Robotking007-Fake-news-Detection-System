@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="analysis-hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="wow fadeInUp">Analysis Results</h1>
+            <p class="wow fadeInUp" data-wow-delay="0.2s">Detailed breakdown of our authenticity assessment</p>
+        </div>
+    </div>
+</section>
+
+<section class="analysis-results">
+    <div class="container">
+        <div class="results-card wow fadeInUp">
+            <div class="result-header {{ 'fake' if result.prediction == 'Fake' else 'real' }}">
+                <h2>This news appears to be <span>{{ result.prediction }}</span></h2>
+                <div class="confidence-level">
+                    <div class="confidence-circle">
+                        <svg class="circle-chart" viewBox="0 0 36 36">
+                            <path class="circle-bg"
+                                d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                            />
+                            <path class="circle-fill"
+                                stroke-dasharray="{{ result.confidence }},100"
+                                d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                            />
+                        </svg>
+                        <span>{{ result.confidence }}%</span>
+                    </div>
+                    <p>Confidence Level</p>
+                </div>
+            </div>
+            
+            <div class="result-content">
+                <div class="result-details">
+                    <h3>Analysis Details</h3>
+                    
+                    <div class="probability-bars">
+                        <div class="probability-bar real" style="width: {{ result.probability.real }}%">
+                            <span>Real: {{ result.probability.real }}%</span>
+                        </div>
+                        <div class="probability-bar fake" style="width: {{ result.probability.fake }}%">
+                            <span>Fake: {{ result.probability.fake }}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-metrics">
+                        <div class="metric">
+                            <h4>Exaggeration</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{ result.features.exaggeration }}%"></div>
+                            </div>
+                            <span>{{ result.features.exaggeration }}%</span>
+                        </div>
+                        <div class="metric">
+                            <h4>Bias</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{ result.features.bias }}%"></div>
+                            </div>
+                            <span>{{ result.features.bias }}%</span>
+                        </div>
+                        <div class="metric">
+                            <h4>Source Reliability</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{ result.features.source_reliability }}%"></div>
+                            </div>
+                            <span>{{ result.features.source_reliability }}%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analyzed-text">
+                    <h3>Analyzed Content</h3>
+                    {% if result.url %}
+                    <p class="source-url"><i class="fas fa-link"></i> <a href="{{ result.url }}" target="_blank">{{ result.url }}</a></p>
+                    {% endif %}
+                    <div class="text-preview">
+                        <p>{{ result.text }}</p>
+                    </div>
+                    <button class="btn btn-secondary" id="showFullText">Show Full Text</button>
+                    <div class="full-text" style="display: none;">
+                        <p>{{ result.full_text }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-actions">
+                <a href="/" class="btn btn-primary"><i class="fas fa-redo"></i> Analyze Another</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Analysis Hero */
+    .analysis-hero {
+        background: linear-gradient(135deg, #0066cc, #004080);
+        color: white;
+        padding: 180px 0 100px;
+        text-align: center;
+    }
+
+    .analysis-hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .analysis-hero p {
+        font-size: 1.2rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Analysis Results */
+    .analysis-results {
+        padding: 80px 0;
+    }
+
+    .results-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .result-header {
+        padding: 30px;
+        text-align: center;
+        color: white;
+    }
+
+    .result-header.real {
+        background: linear-gradient(135deg, #28a745, #218838);
+    }
+
+    .result-header.fake {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+    }
+
+    .result-header h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    .result-header h2 span {
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .confidence-level {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .confidence-circle {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin-bottom: 10px;
+    }
+
+    .circle-chart {
+        width: 100%;
+        height: 100%;
+    }
+
+    .circle-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.2);
+        stroke-width: 3;
+    }
+
+    .circle-fill {
+        fill: none;
+        stroke: white;
+        stroke-width: 3;
+        stroke-linecap: round;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        transition: stroke-dasharray 1s ease;
+    }
+
+    .confidence-circle span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .result-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        padding: 30px;
+    }
+
+    .result-details {
+        padding: 20px;
+    }
+
+    .result-details h3 {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        color: #0066cc;
+    }
+
+    .probability-bars {
+        display: flex;
+        height: 40px;
+        margin-bottom: 30px;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .probability-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 500;
+        transition: width 1s ease;
+    }
+
+    .probability-bar.real {
+        background-color: #28a745;
+    }
+
+    .probability-bar.fake {
+        background-color: #dc3545;
+    }
+
+    .feature-metrics {
+        margin-top: 30px;
+    }
+
+    .metric {
+        margin-bottom: 20px;
+    }
+
+    .metric h4 {
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+
+    .progress-bar {
+        height: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background-color: #0066cc;
+        transition: width 1s ease;
+    }
+
+    .metric span {
+        display: block;
+        text-align: right;
+        margin-top: 5px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .analyzed-text {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .analyzed-text h3 {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        color: #0066cc;
+    }
+
+    .source-url {
+        margin-bottom: 15px;
+        word-break: break-all;
+    }
+
+    .source-url a {
+        color: #0066cc;
+        text-decoration: none;
+    }
+
+    .source-url a:hover {
+        text-decoration: underline;
+    }
+
+    .source-url i {
+        margin-right: 8px;
+    }
+
+    .text-preview {
+        max-height: 200px;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 15px;
+    }
+
+    .text-preview::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: linear-gradient(to bottom, rgba(248, 249, 250, 0), rgba(248, 249, 250, 1));
+    }
+
+    .full-text {
+        margin-top: 15px;
+    }
+
+    .result-actions {
+        padding: 20px 30px;
+        text-align: center;
+        border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 768px) {
+        .result-content {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    document.getElementById('showFullText').addEventListener('click', function() {
+        const fullText = document.querySelector('.full-text');
+        const btn = document.getElementById('showFullText');
+        
+        if (fullText.style.display === 'none') {
+            fullText.style.display = 'block';
+            btn.textContent = 'Hide Full Text';
+        } else {
+            fullText.style.display = 'none';
+            btn.textContent = 'Show Full Text';
+        }
+    });
+</script>
+{% endblock %}

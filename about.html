@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="wow fadeInUp">About TruthGuard</h1>
+            <p class="wow fadeInUp" data-wow-delay="0.2s">Our mission to combat misinformation in the digital age</p>
+        </div>
+    </div>
+</section>
+
+<section class="about-content">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-text wow fadeInUp">
+                <h2>Our Mission</h2>
+                <p>In today's digital landscape, misinformation spreads faster than ever before. TruthGuard was created to help individuals and organizations identify potentially fake or misleading news content using advanced artificial intelligence.</p>
+                <p>Our system analyzes news articles based on linguistic patterns, stylistic markers, and other features that research has shown to be indicative of misinformation.</p>
+                
+                <h2>How It Works</h2>
+                <p>The TruthGuard system uses a machine learning model trained on thousands of verified real and fake news articles. When you submit content for analysis:</p>
+                <ol>
+                    <li>The text is processed to extract key features</li>
+                    <li>Our model evaluates these features against known patterns</li>
+                    <li>We provide a confidence score and detailed analysis</li>
+                </ol>
+                
+                <div class="tech-stack">
+                    <h3>Technology Stack</h3>
+                    <div class="tech-icons">
+                        <div class="tech-icon">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="tech-icon">
+                            <i class="fas fa-robot"></i>
+                            <span>NLTK</span>
+                        </div>
+                        <div class="tech-icon">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Scikit-learn</span>
+                        </div>
+                        <div class="tech-icon">
+                            <i class="fas fa-network-wired"></i>
+                            <span>Flask</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-image wow fadeInUp" data-wow-delay="0.2s">
+                <img src="{{ url_for('static', filename='img/about-bg.jpg') }}" alt="About TruthGuard">
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* About Hero */
+    .about-hero {
+        background: linear-gradient(135deg, #0066cc, #004080);
+        color: white;
+        padding: 180px 0 100px;
+        text-align: center;
+    }
+
+    .about-hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .about-hero p {
+        font-size: 1.2rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* About Content */
+    .about-content {
+        padding: 80px 0;
+    }
+
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: center;
+    }
+
+    .about-text h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #0066cc;
+    }
+
+    .about-text p {
+        margin-bottom: 20px;
+        line-height: 1.7;
+    }
+
+    .about-text ol {
+        margin-left: 20px;
+        margin-bottom: 30px;
+    }
+
+    .about-text li {
+        margin-bottom: 10px;
+    }
+
+    .tech-stack {
+        margin-top: 40px;
+    }
+
+    .tech-stack h3 {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        color: #0066cc;
+    }
+
+    .tech-icons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 20px;
+    }
+
+    .tech-icon {
+        text-align: center;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .tech-icon:hover {
+        transform: translateY(-5px);
+    }
+
+    .tech-icon i {
+        font-size: 2rem;
+        color: #0066cc;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .tech-icon span {
+        font-weight: 500;
+    }
+
+    .about-image img {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .about-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .about-image {
+            order: -1;
+        }
+    }
+</style>
+{% endblock %}
